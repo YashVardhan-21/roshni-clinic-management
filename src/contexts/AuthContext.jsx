@@ -14,7 +14,8 @@ export function AuthProvider({ children }) {
                            import.meta.env.VITE_SUPABASE_URL === 'your_supabase_project_url_here' ||
                            import.meta.env.VITE_SUPABASE_URL.includes('your_supabase') ||
                            !import.meta.env.VITE_SUPABASE_ANON_KEY ||
-                           import.meta.env.VITE_SUPABASE_ANON_KEY === 'your_supabase_anon_key_here';
+                           import.meta.env.VITE_SUPABASE_ANON_KEY === 'your_supabase_anon_key_here' ||
+                           import.meta.env.VITE_ENVIRONMENT === 'development';
 
   useEffect(() => {
     let isMounted = true;
@@ -69,6 +70,9 @@ export function AuthProvider({ children }) {
           } else if (isMounted) {
             setAuthError(profileResult?.error || "Failed to load user profile");
           }
+        } else if (isMounted) {
+          // No session found, user needs to login
+          console.log('No active session found');
         }
       } catch (error) {
         if (isMounted) {
