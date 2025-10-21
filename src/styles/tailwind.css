@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core System Colors */
+    --color-background: #FAFBFC; /* gray-50 */
+    --color-foreground: #1A2B2B; /* custom-dark-teal-gray */
+    --color-border: #E5F0F0; /* custom-muted-teal */
+    --color-input: #FFFFFF; /* white */
+    --color-ring: #2D7D7D; /* custom-therapeutic-teal */
+    
+    /* Card Colors */
+    --color-card: #FFFFFF; /* white */
+    --color-card-foreground: #1A2B2B; /* custom-dark-teal-gray */
+    
+    /* Popover Colors */
+    --color-popover: #FFFFFF; /* white */
+    --color-popover-foreground: #1A2B2B; /* custom-dark-teal-gray */
+    
+    /* Muted Colors */
+    --color-muted: #F5F7F7; /* custom-light-gray */
+    --color-muted-foreground: #5A6B6B; /* custom-medium-teal-gray */
+    
+    /* Primary Colors */
+    --color-primary: #2D7D7D; /* custom-therapeutic-teal */
+    --color-primary-foreground: #FFFFFF; /* white */
+    
+    /* Secondary Colors */
+    --color-secondary: #7BA05B; /* custom-sage-green */
+    --color-secondary-foreground: #FFFFFF; /* white */
+    
+    /* Accent Colors */
+    --color-accent: #E8A87C; /* custom-warm-peach */
+    --color-accent-foreground: #1A2B2B; /* custom-dark-teal-gray */
+    
+    /* Success Colors */
+    --color-success: #4CAF50; /* green-500 */
+    --color-success-foreground: #FFFFFF; /* white */
+    
+    /* Warning Colors */
+    --color-warning: #FF9800; /* orange-500 */
+    --color-warning-foreground: #FFFFFF; /* white */
+    
+    /* Error/Destructive Colors */
+    --color-error: #E57373; /* red-300 */
+    --color-error-foreground: #FFFFFF; /* white */
+    --color-destructive: #E57373; /* red-300 */
+    --color-destructive-foreground: #FFFFFF; /* white */
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Smooth transitions for therapeutic environment */
+  * {
+    transition: color 200ms ease-out, background-color 200ms ease-out, border-color 200ms ease-out;
+  }
+
+  /* Reduced motion support for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* Custom scrollbar for therapeutic feel */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-muted);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #236666;
+  }
+}
+
+@layer components {
+  /* Therapeutic shadow system */
+  .shadow-therapeutic {
+    box-shadow: 0 2px 8px rgba(45, 125, 125, 0.08);
+  }
+
+  .shadow-therapeutic-lg {
+    box-shadow: 0 4px 16px rgba(45, 125, 125, 0.12);
+  }
+
+  /* Animation classes for micro-interactions */
+  .animate-gentle-fade {
+    animation: gentle-fade 300ms ease-out;
+  }
+
+  .animate-slide-in {
+    animation: slide-in 300ms ease-out;
+  }
+
+  @keyframes gentle-fade {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* Touch-friendly targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Contextual tooltip styles */
+  .tooltip-delay {
+    transition-delay: 800ms;
+  }
+}
