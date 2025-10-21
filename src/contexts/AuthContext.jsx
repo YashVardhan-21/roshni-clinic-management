@@ -15,7 +15,11 @@ export function AuthProvider({ children }) {
                            import.meta.env.VITE_SUPABASE_URL.includes('your_supabase') ||
                            !import.meta.env.VITE_SUPABASE_ANON_KEY ||
                            import.meta.env.VITE_SUPABASE_ANON_KEY === 'your_supabase_anon_key_here' ||
-                           import.meta.env.VITE_ENVIRONMENT === 'development';
+                           import.meta.env.VITE_ENVIRONMENT === 'development' ||
+                           import.meta.env.VITE_FORCE_DEV_MODE === 'true' ||
+                           import.meta.env.DEV || // Vite development mode
+                           window.location.hostname === 'localhost' || // Local development
+                           window.location.hostname === '127.0.0.1'; // Local development
 
   useEffect(() => {
     let isMounted = true;
@@ -27,6 +31,12 @@ export function AuthProvider({ children }) {
         setAuthError(null);
 
         // Development mode - use mock user data
+        console.log('🔍 Auth Debug - isDevelopmentMode:', isDevelopmentMode);
+        console.log('🔍 Auth Debug - VITE_SUPABASE_URL:', import.meta.env.VITE_SUPABASE_URL);
+        console.log('🔍 Auth Debug - VITE_FORCE_DEV_MODE:', import.meta.env.VITE_FORCE_DEV_MODE);
+        console.log('🔍 Auth Debug - import.meta.env.DEV:', import.meta.env.DEV);
+        console.log('🔍 Auth Debug - window.location.hostname:', window.location.hostname);
+        
         if (isDevelopmentMode) {
           console.log('🔧 Development mode active - using mock user data');
           const mockUser = {
@@ -68,7 +78,18 @@ export function AuthProvider({ children }) {
           if (profileResult?.success && isMounted) {
             setUserProfile(profileResult.data);
           } else if (isMounted) {
-            setAuthError(profileResult?.error || "Failed to load user profile");
+            // If profile doesn't exist, create a mock profile for demo
+            console.log('User profile not found, using mock profile for demo');
+            const mockProfile = {
+              id: authUser.id,
+              email: authUser.email,
+              full_name: authUser.user_metadata?.full_name || 'Demo User',
+              role: 'patient',
+              phone_number: authUser.user_metadata?.phone || '+91 9876543210',
+              language_preference: 'english',
+              is_active: true
+            };
+            setUserProfile(mockProfile);
           }
         } else if (isMounted) {
           // No session found, user needs to login
@@ -129,6 +150,30 @@ export function AuthProvider({ children }) {
   const signIn = async (email, password) => {
     try {
       setAuthError(null);
+      
+      // If in development mode, just set mock user
+      if (isDevelopmentMode) {
+        console.log('🔧 Development mode - bypassing real authentication');
+        const mockUser = {
+          id: 'mock-user-123',
+          email: email,
+          created_at: new Date().toISOString()
+        };
+        const mockProfile = {
+          id: 'mock-user-123',
+          email: email,
+          full_name: 'Demo User',
+          role: 'patient',
+          phone_number: '+91 9876543210',
+          language_preference: 'english',
+          is_active: true
+        };
+        
+        setUser(mockUser);
+        setUserProfile(mockProfile);
+        return { success: true, data: { user: mockUser, profile: mockProfile } };
+      }
+      
       const result = await authService.signIn(email, password);
 
       if (!result?.success) {

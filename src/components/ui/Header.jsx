@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { Menu, X, LogOut, User, Settings, Bell } from 'lucide-react';
+import ProfileModal from '../ProfileModal';
 
 const Header = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -9,6 +10,7 @@ const Header = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const handleSignOut = async () => {
     const result = await signOut();
@@ -81,7 +83,10 @@ const Header = () => {
             {user ? (
               <div className="relative">
                 <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  onClick={() => {
+                    console.log('Profile button clicked, isUserMenuOpen:', isUserMenuOpen);
+                    setIsUserMenuOpen(!isUserMenuOpen);
+                  }}
                   className="flex items-center space-x-2 p-2 rounded-md hover:bg-muted"
                 >
                   <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
@@ -96,7 +101,7 @@ const Header = () => {
 
                 {/* User Dropdown */}
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-md shadow-lg py-1 z-50">
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50">
                     <div className="px-4 py-2 border-b border-border">
                       <p className="text-sm font-medium text-foreground">
                         {userProfile?.full_name}
@@ -108,7 +113,7 @@ const Header = () => {
                     <button
                       onClick={() => {
                         setIsUserMenuOpen(false);
-                        // TODO: Navigate to profile page
+                        setIsProfileModalOpen(true);
                       }}
                       className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted"
                     >
@@ -118,7 +123,7 @@ const Header = () => {
                     <button
                       onClick={() => {
                         setIsUserMenuOpen(false);
-                        // TODO: Navigate to settings page
+                        navigate('/patient-dashboard'); // For now, go to dashboard
                       }}
                       className="flex items-center space-x-2 w-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted"
                     >
@@ -183,6 +188,12 @@ const Header = () => {
           onClick={() => setIsUserMenuOpen(false)}
         />
       )}
+
+      {/* Profile Modal */}
+      <ProfileModal 
+        isOpen={isProfileModalOpen} 
+        onClose={() => setIsProfileModalOpen(false)} 
+      />
     </header>
   );
 };

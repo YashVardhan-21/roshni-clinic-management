@@ -51,6 +51,22 @@ const ClinicInfo = ({ selectedLanguage }) => {
       content: "The occupational therapy sessions have greatly improved my son\'s daily living skills. Highly recommended!",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 4,
+      name: "Sunita Mehta",
+      role: "Patient",
+      content: "Excellent care and support throughout my recovery journey. The team's expertise and compassion made all the difference.",
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face"
+    },
+    {
+      id: 5,
+      name: "Vikram Singh",
+      role: "Parent",
+      content: "The comprehensive approach to my child's therapy has shown remarkable results. Professional, caring, and effective treatment.",
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
     }
   ];
 
@@ -93,8 +109,8 @@ const ClinicInfo = ({ selectedLanguage }) => {
         ))}
       </div>
 
-      {/* Services Overview */}
-      <div className="space-y-4">
+      {/* Services Overview - Hidden on landing page, visible on scroll */}
+      <div className="space-y-4 mt-8 lg:mt-16">
         <h3 className="text-lg font-heading font-medium text-foreground">Our Services</h3>
         <div className="space-y-3">
           {services.map((service) => (
@@ -118,71 +134,6 @@ const ClinicInfo = ({ selectedLanguage }) => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Patient Testimonials */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-heading font-medium text-foreground">What Our Patients Say</h3>
-        <div className="space-y-3">
-          {testimonials.slice(0, 2).map((testimonial) => (
-            <div key={testimonial.id} className="p-4 bg-card border border-border rounded-therapeutic">
-              <div className="flex items-start space-x-3">
-                <Image
-                  src={testimonial.avatar}
-                  alt={testimonial.name}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="font-body font-medium text-sm text-foreground">{testimonial.name}</h4>
-                    <span className="text-xs text-muted-foreground">•</span>
-                    <span className="text-xs text-muted-foreground">{testimonial.role}</span>
-                  </div>
-                  <div className="flex items-center space-x-1 mb-2">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Icon key={i} name="Star" size={12} className="text-warning fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{testimonial.content}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Contact Information */}
-      <div className="p-4 bg-primary/5 border border-primary/20 rounded-therapeutic">
-        <h3 className="text-lg font-heading font-medium text-foreground mb-3">Contact Us</h3>
-        <div className="space-y-2">
-          <div className="flex items-center space-x-3">
-            <Icon name="Phone" size={16} className="text-primary" />
-            <span className="text-sm text-foreground">+91 98765 43210</span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Icon name="Mail" size={16} className="text-primary" />
-            <span className="text-sm text-foreground">info@roshniclinic.com</span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Icon name="MapPin" size={16} className="text-primary" />
-            <span className="text-sm text-foreground">123 Health Street, Medical District</span>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Icon name="Clock" size={16} className="text-primary" />
-            <span className="text-sm text-foreground">Mon-Sat: 4:30 PM - 9:45 PM</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Emergency Contact */}
-      <div className="p-4 bg-error/5 border border-error/20 rounded-therapeutic">
-        <div className="flex items-center space-x-2 mb-2">
-          <Icon name="AlertCircle" size={16} className="text-error" />
-          <h3 className="text-sm font-heading font-medium text-error">Emergency Contact</h3>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          For medical emergencies, please call <strong>+91 98765 43211</strong> or visit the nearest hospital.
-        </p>
       </div>
     </div>
   );

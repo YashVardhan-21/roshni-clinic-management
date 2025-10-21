@@ -131,7 +131,7 @@ const AuthForm = ({ isLogin, onToggleMode, selectedLanguage }) => {
   const displayError = formError || authError;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       {/* Error Display */}
       {displayError && (
         <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm">
@@ -266,7 +266,7 @@ const AuthForm = ({ isLogin, onToggleMode, selectedLanguage }) => {
       <Button
         type="submit"
         disabled={isLoading}
-        className="w-full h-12 text-lg"
+        className="w-full h-10 text-base"
       >
         {isLoading ? (
           <div className="flex items-center gap-2">
