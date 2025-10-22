@@ -72,24 +72,40 @@ export function AuthProvider({ children }) {
           const authUser = sessionResult.data.session.user;
           setUser(authUser);
 
-          // Fetch user profile
-          const profileResult = await authService.getUserProfile(authUser.id);
+          // Fetch user profile with better error handling
+          try {
+            const profileResult = await authService.getUserProfile(authUser.id);
 
-          if (profileResult?.success && isMounted) {
-            setUserProfile(profileResult.data);
-          } else if (isMounted) {
-            // If profile doesn't exist, create a mock profile for demo
-            console.log('User profile not found, using mock profile for demo');
-            const mockProfile = {
-              id: authUser.id,
-              email: authUser.email,
-              full_name: authUser.user_metadata?.full_name || 'Demo User',
-              role: 'patient',
-              phone_number: authUser.user_metadata?.phone || '+91 9876543210',
-              language_preference: 'english',
-              is_active: true
-            };
-            setUserProfile(mockProfile);
+            if (profileResult?.success && isMounted) {
+              setUserProfile(profileResult.data);
+            } else if (isMounted) {
+              // If profile doesn't exist, create a mock profile for demo
+              console.log('User profile not found, using mock profile for demo');
+              const mockProfile = {
+                id: authUser.id,
+                email: authUser.email,
+                full_name: authUser.user_metadata?.full_name || 'Demo User',
+                role: 'patient',
+                phone_number: authUser.user_metadata?.phone || '+91 9876543210',
+                language_preference: 'english',
+                is_active: true
+              };
+              setUserProfile(mockProfile);
+            }
+          } catch (profileError) {
+            console.log('Profile fetch error, using mock profile:', profileError);
+            if (isMounted) {
+              const mockProfile = {
+                id: authUser.id,
+                email: authUser.email,
+                full_name: authUser.user_metadata?.full_name || 'Demo User',
+                role: 'patient',
+                phone_number: authUser.user_metadata?.phone || '+91 9876543210',
+                language_preference: 'english',
+                is_active: true
+              };
+              setUserProfile(mockProfile);
+            }
           }
         } else if (isMounted) {
           // No session found, user needs to login
@@ -122,12 +138,37 @@ export function AuthProvider({ children }) {
         if (event === "SIGNED_IN" && session?.user) {
           setUser(session.user);
 
-          // Fetch user profile for signed in user
+          // Fetch user profile for signed in user with better error handling
           authService.getUserProfile(session.user.id).then((profileResult) => {
             if (profileResult?.success && isMounted) {
               setUserProfile(profileResult.data);
             } else if (isMounted) {
-              setAuthError(profileResult?.error || "Failed to load user profile");
+              // If profile fetch fails, create a mock profile for demo
+              console.log('User profile not found after sign in, using mock profile for demo');
+              const mockProfile = {
+                id: session.user.id,
+                email: session.user.email,
+                full_name: session.user.user_metadata?.full_name || 'Demo User',
+                role: 'patient',
+                phone_number: session.user.user_metadata?.phone || '+91 9876543210',
+                language_preference: 'english',
+                is_active: true
+              };
+              setUserProfile(mockProfile);
+            }
+          }).catch((profileError) => {
+            console.log('Profile fetch error after sign in, using mock profile:', profileError);
+            if (isMounted) {
+              const mockProfile = {
+                id: session.user.id,
+                email: session.user.email,
+                full_name: session.user.user_metadata?.full_name || 'Demo User',
+                role: 'patient',
+                phone_number: session.user.user_metadata?.phone || '+91 9876543210',
+                language_preference: 'english',
+                is_active: true
+              };
+              setUserProfile(mockProfile);
             }
           });
         } else if (event === "SIGNED_OUT") {

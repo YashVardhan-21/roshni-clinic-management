@@ -128,98 +128,30 @@ const PatientDashboard = () => {
         }
         
         // Try to load real data first
-        const result = await patientService.getPatientDashboard(userProfile.id);
-        
-        if (result.success) {
-          setDashboardData(result.data);
-        } else {
-          // If real data fails, use mock data for demo
-          console.log('Using mock data for demo:', result.error);
+        try {
+          const result = await patientService.getPatientDashboard(userProfile.id);
+          
+          if (result.success) {
+            setDashboardData(result.data);
+          } else {
+            console.log('Dashboard data fetch failed, using fallback data:', result.error);
+            // Use fallback data when API fails
+            setDashboardData({
+              upcoming_appointments: [],
+              recent_sessions: [],
+              pending_exercises: [],
+              progress_summary: [],
+              last_updated: new Date().toISOString()
+            });
+          }
+        } catch (apiError) {
+          console.log('Dashboard API error, using fallback data:', apiError);
+          // Use fallback data when API fails
           setDashboardData({
-            upcoming_appointments: [
-              {
-                id: 1,
-                appointment_date: '2025-01-16',
-                start_time: '10:00',
-                therapist: { user_profiles: { full_name: 'Dr. Sarah Johnson' } },
-                service: { name: 'Speech Therapy' }
-              },
-              {
-                id: 2,
-                appointment_date: '2025-01-18',
-                start_time: '14:00',
-                therapist: { user_profiles: { full_name: 'Dr. Mike Wilson' } },
-                service: { name: 'Occupational Therapy' }
-              }
-            ],
-            recent_sessions: [
-              {
-                id: 1,
-                session_type: 'Speech Therapy',
-                session_date: '2025-01-10',
-                progress_notes: 'Great progress with pronunciation exercises'
-              },
-              {
-                id: 2,
-                session_type: 'Occupational Therapy',
-                session_date: '2025-01-08',
-                progress_notes: 'Improved fine motor skills with new exercises'
-              },
-              {
-                id: 3,
-                session_type: 'Physical Therapy',
-                session_date: '2025-01-05',
-                progress_notes: 'Strengthening exercises showing good results'
-              }
-            ],
-            pending_exercises: [
-              {
-                id: 1,
-                exercise_name: 'Breathing Exercises',
-                difficulty_level: 'Easy',
-                target_duration: 10,
-                is_completed: false
-              },
-              {
-                id: 2,
-                exercise_name: 'Articulation Practice',
-                difficulty_level: 'Medium',
-                target_duration: 15,
-                is_completed: false
-              },
-              {
-                id: 3,
-                exercise_name: 'Fine Motor Skills',
-                difficulty_level: 'Easy',
-                target_duration: 20,
-                is_completed: false
-              },
-              {
-                id: 4,
-                exercise_name: 'Balance Training',
-                difficulty_level: 'Hard',
-                target_duration: 25,
-                is_completed: false
-              }
-            ],
-            progress_summary: [
-              {
-                metric_category: 'Speech Therapy',
-                metric_value: 75
-              },
-              {
-                metric_category: 'Occupational Therapy',
-                metric_value: 60
-              },
-              {
-                metric_category: 'Physical Therapy',
-                metric_value: 85
-              },
-              {
-                metric_category: 'Cognitive Skills',
-                metric_value: 70
-              }
-            ],
+            upcoming_appointments: [],
+            recent_sessions: [],
+            pending_exercises: [],
+            progress_summary: [],
             last_updated: new Date().toISOString()
           });
         }
